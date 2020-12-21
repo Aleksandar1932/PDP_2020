@@ -11,7 +11,14 @@ public class LogAnalysis {
     public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
         private String getMonthAndFileKeyFromLogLine(String line) {
             String month = line.split("/")[1];
-            String file = Paths.get(line.split("GET")[1].split("HTTP")[0]).getFileName().toString();
+            String file = "";
+            if (line.contains("GET")) {
+                file = Paths.get(line.split("GET")[1].split("HTTP")[0]).getFileName().toString();
+            }
+            if (line.contains("POST")) {
+                file = Paths.get(line.split("POST")[1].split("HTTP")[0]).getFileName().toString();
+            }
+
 
             return String.format("%s %s", month, file);
         }
